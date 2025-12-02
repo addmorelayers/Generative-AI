@@ -38,9 +38,6 @@ def plot_distribution(samples: np.ndarray):
     fig.show()
 
 
-import numpy as np
-import plotly.express as px
-
 def plot_samples(samples: np.ndarray):
     """
     Plot samples in 1D, 2D, or 3D using Plotly.
