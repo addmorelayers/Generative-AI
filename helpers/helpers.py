@@ -1,26 +1,39 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 def plot_distribution(samples: np.ndarray):
     """
-    Plot the distribution of sampled data.
-    - If samples are 1D: show histogram.
-    - If samples are 2D: show scatter plot.
+    Plot 1D or 2D histograms using Plotly.
     """
     samples = np.asarray(samples)
 
-    plt.figure(figsize=(6, 4))
-
     if samples.ndim == 1 or samples.shape[1] == 1:
-        # 1D samples → histogram
-        plt.hist(samples, bins=30, density=True, color="#1f77b4", alpha=0.7, edgecolor="white")
+        # 1D histogram
+        fig = px.histogram(
+            x=samples.flatten(),
+            nbins=40,
+            opacity=0.8,
+            color_discrete_sequence=["#1f77b4"]
+        )
     elif samples.shape[1] == 2:
-        # 2D samples → scatter
-        plt.scatter(samples[:, 0], samples[:, 1], s=25, color="#1f77b4", alpha=0.75, edgecolors="white", linewidth=0.5)
+        # 2D histogram (heatmap)
+        fig = px.density_heatmap(
+            x=samples[:, 0],
+            y=samples[:, 1],
+            nbinsx=40,
+            nbinsy=40,
+            color_continuous_scale="Blues"
+        )
     else:
-        raise ValueError("plot_distribution only supports 1D or 2D samples")
+        raise ValueError("plot_distribution supports only 1D or 2D samples")
 
-    plt.grid(alpha=0.2)
-    plt.tight_layout()
-    plt.show()
+    fig.update_layout(
+        template="simple_white",
+        width=600,
+        height=450,
+        title=None,
+        xaxis_title=None,
+        yaxis_title=None
+    )
+    fig.show()
 
