@@ -41,16 +41,18 @@ def plot_distribution(samples: np.ndarray):
 def plot_samples(samples: np.ndarray):
     """
     Plot samples in 1D, 2D, or 3D using Plotly.
+    - 1D: samples on a line (x = samples, y = 0)
+    - 2D: scatter
+    - 3D: scatter
     """
     samples = np.asarray(samples)
 
     if samples.ndim == 1 or samples.shape[1] == 1:
-        # 1D: points along a line
-        fig = px.scatter(
-            x=np.arange(len(samples)),
-            y=samples.flatten(),
-            color_discrete_sequence=["#1f77b4"]
-        )
+        x = samples.flatten()
+        y = np.zeros_like(x)
+        fig = px.scatter(x=x, y=y, color_discrete_sequence=["#1f77b4"])
+        fig.update_yaxes(visible=False, showticklabels=False)
+        fig.update_xaxes(title_text=None)
 
     elif samples.shape[1] == 2:
         # 2D scatter
@@ -58,7 +60,7 @@ def plot_samples(samples: np.ndarray):
             x=samples[:, 0],
             y=samples[:, 1],
             opacity=0.8,
-            color_discrete_sequence=["#1f77b4"]
+            color_discrete_sequence=["#1f77b4"],
         )
 
     elif samples.shape[1] == 3:
@@ -68,19 +70,14 @@ def plot_samples(samples: np.ndarray):
             y=samples[:, 1],
             z=samples[:, 2],
             opacity=0.8,
-            color_discrete_sequence=["#1f77b4"]
+            color_discrete_sequence=["#1f77b4"],
         )
 
     else:
         raise ValueError("plot_samples supports only 1D, 2D, or 3D samples")
 
-    fig.update_layout(
-        template="simple_white",
-        width=600,
-        height=450,
-        title=None,
-        xaxis_title=None,
-        yaxis_title=None
-    )
+    fig.update_layout(template="simple_white", width=600, height=450, title=None)
     fig.show()
+
+
 
